@@ -1,0 +1,68 @@
+---
+title: "Where People Go To Check the Weather by Age"
+author: "Jiaxin Zheng"
+date: "09/07/2024"
+output:
+  html_document: default
+  pdf_document: default
+---
+The article "Where People Go To Check the Weather" is about what method does people use to check the weather. Author asked SurveyMonkey Audience to run a simple survey with 938 respondents.
+1. 80% of the respondents check the weather daily
+2. About age differences: what are the favorite method that younger and older respondents to check the weather
+3. About weather sources they use
+4. About Regional Variations
+
+Articale Link:
+https://fivethirtyeight.com/features/weather-forecast-news-app-habits/
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+
+```{r }
+weather_data<- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/weather-check/weather-check.csv")
+glimpse(weather_data)
+
+cleand_weather_data <- weather_data %>% 
+  select(Age="Age",
+         Do.you.typically.check.a.daily.weather.report.="Do.you.typically.check.a.daily.weather.report.",
+         Weather_Check_Method = "How.do.you.typically.check.the.weather.",
+         Iousehold_Income = "A.specific.website.or.app..please.provide.the.answer.",
+         US.Region = "US.Region")
+head(cleand_weather_data)
+glimpse(cleand_weather_data)
+```
+
+```{r Do you typically check a daily weather report by Age}
+ggplot(cleand_weather_data, aes(x= Age, fill= Do.you.typically.check.a.daily.weather.report.))+
+  geom_bar(position = "dodge")+
+  labs(title="Do you typically check a daily weather report",
+       x= "Age",
+       y= "Count")+
+  theme_bw()
+```
+```{r Weather Check Method by Age Group}
+ggplot(cleand_weather_data, aes(x= Age, fill= Weather_Check_Method))+
+  geom_bar(position = "dodge")+
+  labs(title="Weather Check Method by Age Group",
+       x= "Age",
+       y= "Count")+
+  theme_bw()
+```
+```{r Do you typically check a daily weather report by Area}
+ggplot(cleand_weather_data, aes(x= US.Region, fill= Do.you.typically.check.a.daily.weather.report.))+
+  geom_bar(position = "dodge")+
+  labs(title="Do You Typically Check A Daily Weather Report By Area",
+       x= "US.Region",
+       y= "Count")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+
+. In conclusion: The first and second plot shows how frequents respondents check the weather by age,and age 45-59 check the weather more frequents than others.Most of the younger(18-29 & 30-44) like use the default app the phone. And age 45-60+ like use local TV news to check the weather.
+
+Last plot: On the article mentions respondents from New England got 94% checked the weather everyday. But in the graphic shows respondents from Pacific checked the weather more frequents than US region.
